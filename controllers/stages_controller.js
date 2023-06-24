@@ -81,5 +81,23 @@ stages.delete('/:id', async (req, res) => {
     }
 })
 
+//SHOW A STAGE
+stages.get('/:name', async (req, res) => {
+    try {
+        const foundStage = await Stage.findOne({
+            where: { stage_name: req.params.name },
+            include: {
+                model: Event,
+                as: 'events',
+                through: { attributes: [] }
+            }
+        })
+        res.status(200).json(foundStage)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+})
+
 // EXPORT
 module.exports = stages
